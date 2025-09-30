@@ -11,10 +11,11 @@ services:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
       - TZ=America/Sao_Paulo
+
     networks:
       - traefik
 
-    # (opcional) o Traefik/stack só marca como "healthy" quando a app responde
+    # saúde do container (opcional)
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/ || exit 1"]
       interval: 15s
@@ -24,16 +25,16 @@ services:
     labels:
       traefik.enable: "true"
 
-      # Router HTTPS (principal)
+      # HTTPS (principal)
       traefik.http.routers.sitetech.rule: "Host(`site.mentoark.com.br`)"
       traefik.http.routers.sitetech.entrypoints: "websecure"
       traefik.http.routers.sitetech.tls: "true"
       traefik.http.routers.sitetech.tls.certresolver: "letsencrypt"
 
-      # Serviço interno escutando na 3000
+      # serviço interno (porta do Next no container)
       traefik.http.services.sitetech.loadbalancer.server.port: "3000"
 
-      # Router HTTP -> redireciona para HTTPS
+      # HTTP -> HTTPS
       traefik.http.routers.sitetech-web.rule: "Host(`site.mentoark.com.br`)"
       traefik.http.routers.sitetech-web.entrypoints: "web"
       traefik.http.routers.sitetech-web.middlewares: "sitetech-redirect"

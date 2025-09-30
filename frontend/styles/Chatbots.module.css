@@ -1,0 +1,82 @@
+/* frontend/styles/Chatbots.module.css */
+
+.hero {
+  padding: 4rem 0;
+  color: #fff;
+  background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 100%);
+}
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+.hero p {
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+}
+.heroImg {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  display: block;
+}
+
+.benefits {
+  padding: 4rem 0;
+  background: #0F172A;
+}
+.benefits .card {
+  background: #1F2937;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+}
+.benefits h3 {
+  margin-bottom: 0.75rem;
+  color: #1D4ED8;
+}
+.benefits p {
+  color: #CBD5E1;
+}
+
+.features {
+  padding: 4rem 0;
+}
+.features img {
+  width: 100%;
+  border-radius: 8px;
+}
+.features h2 {
+  margin-bottom: 1rem;
+  color: #1D4ED8;
+}
+.features ol {
+  list-style: decimal inside;
+  color: #CBD5E1;
+}
+.features li {
+  margin-bottom: 0.75rem;
+}
+
+.cta {
+  padding: 4rem 0;
+  background: #1D4ED8;
+  color: #fff;
+}
+.cta h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.cta p {
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .hero .grid-2,
+  .features .grid-2 {
+    grid-template-columns: 1fr;
+  }
+  .benefits .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}

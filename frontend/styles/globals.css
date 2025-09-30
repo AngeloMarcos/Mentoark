@@ -1,0 +1,224 @@
+/* ================================
+   MentoArk — styles/globals.css
+   (overlay diagonal Azul + Laranja)
+   ================================ */
+
+:root {
+  /* Marca */
+  --accent:   #ff6600;   /* laranja principal */
+  --accent-2: #ff7a1a;   /* laranja claro para glow */
+
+  /* Azuis base */
+  --blue-dark: #0F172A;
+  --blue-base: #1D4ED8;
+  --blue-light:#3b82f6;
+
+  /* Fundo base */
+  --bg-1: #0b1225;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--blue-dark); /* fallback caso ::before não renderize */
+}
+html, body, #__next { height: 100%; }
+
+body {
+  font-family: 'Urbanist', sans-serif;
+  color: #FFFFFF;
+  line-height: 1.6;
+  background: transparent;
+  position: relative; /* para o ::before fixo */
+  z-index: 0;
+}
+
+#__next {
+  position: relative;
+  z-index: 1;
+  background: transparent !important;
+}
+
+/* =======================================
+   OVERLAY (halos azuis + laranjas + faixa
+   diagonal fosca em azul→laranja)
+   ======================================= */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background:
+    /* Vinheta leve nas bordas (contraste) */
+    radial-gradient(140% 110% at 50% 50%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.34) 100%),
+
+    /* Halos AZUIS amplos */
+    radial-gradient(1600px 1000px at 15% 10%, rgba(59,130,246,0.50), transparent 62%), /* topo/esq */
+    radial-gradient(1500px 900px  at 80% 70%, rgba(29,78,216,0.38),  transparent 60%),  /* base/dir */
+
+    /* Halos LARANJAS reforçados (glow) */
+    radial-gradient(1200px 780px  at 82% 28%, rgba(255,122,26,0.34), transparent 64%), /* +força perto do robô */
+    radial-gradient(1100px 760px  at 35% 90%, rgba(255,102,0,0.22), transparent 66%), /* canto inf/esq */
+
+    /* FAIXA DIAGONAL — azul→laranja, larga e fosca (3 camadas) */
+    /* base muito ampla */
+    linear-gradient(
+      -16deg,
+      transparent 21%,
+      rgba(59,130,246,0.00) 27%,
+      rgba(59,130,246,0.10) 35%,     /* azul leve */
+      rgba(29,78,216,0.16) 41%,      /* azul mais profundo */
+      rgba(255,122,26,0.28) 53%,     /* laranja destacado (↑) */
+      rgba(255,102,0,0.24) 58%,      /* laranja quente (↑) */
+      rgba(255,122,26,0.18) 64%,     /* transição suave */
+      rgba(59,130,246,0.06) 70%,     /* volta a “esfriar” */
+      rgba(59,130,246,0.00) 74%,
+      transparent 79%
+    ),
+    /* bloom para tirar qualquer aresta */
+    linear-gradient(
+      -16deg,
+      transparent 18%,
+      rgba(59,130,246,0.06) 34%,
+      rgba(255,122,26,0.10) 50%,     /* bloom laranja (↑) */
+      rgba(59,130,246,0.06) 66%,
+      transparent 82%
+    ),
+    /* véu central (garante zero “linha” nítida) */
+    linear-gradient(
+      -16deg,
+      transparent 26%,
+      rgba(255,122,26,0.06) 46%,     /* leve véu laranja (↑) */
+      rgba(255,122,26,0.08) 50%,     /* leve véu laranja (↑) */
+      rgba(255,122,26,0.06) 54%,
+      transparent 74%
+    ),
+
+    /* Base escura */
+    linear-gradient(180deg, var(--bg-1) 0%, #0d152d 42%, var(--blue-dark) 100%);
+
+  background-attachment: fixed;
+  /* fosco com cores vivas */
+  filter: saturate(115%) contrast(103%) blur(0.9px);
+}
+
+/* Responsivo — mantém ampla e difusa com laranja reforçado */
+@media (max-width: 1024px) {
+  body::before {
+    background:
+      radial-gradient(140% 110% at 50% 50%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.34) 100%),
+      radial-gradient(1300px 820px  at 16% 12%, rgba(12, 97, 233, 0.48), transparent 62%),
+      radial-gradient(1300px 860px  at 78% 68%, rgba(14, 56, 170, 0.36),  transparent 60%),
+
+      /* laranjas reforçados também no tablet */
+      radial-gradient(1000px 720px  at 82% 28%, rgba(223, 100, 12, 0.26), transparent 64%),
+      radial-gradient(900px  640px  at 28% 88%, rgba(145, 71, 21, 0.16),  transparent 66%),
+
+      linear-gradient(
+        -16deg,
+        transparent 20%,
+        rgba(59,130,246,0.00) 26%,
+        rgba(78, 146, 255, 0.1) 35%,
+        rgba(29,78,216,0.18) 44%,
+        rgba(238, 106, 12, 0.26) 53%,   /* (↑) */
+        rgba(230, 97, 9, 0.22) 58%,   /* (↑) */
+        rgba(255,122,26,0.16) 64%,  /* (↑) */
+        rgba(59,130,246,0.06) 70%,
+        rgba(59,130,246,0.00) 74%,
+        transparent 79%
+      ),
+      linear-gradient(
+        -16deg,
+        transparent 18%,
+        rgba(59,130,246,0.06) 36%,
+        rgba(255,122,26,0.10) 50%,  /* (↑) */
+        rgba(59,130,246,0.06) 64%,
+        transparent 82%
+      ),
+      linear-gradient(
+        -16deg,
+        transparent 24%,
+        rgba(255,122,26,0.06) 46%,  /* (↑) */
+        rgba(255,122,26,0.08) 50%,  /* (↑) */
+        rgba(255,122,26,0.06) 54%,
+        transparent 74%
+      ),
+      linear-gradient(180deg, var(--bg-1) 0%, #0d152d 42%, var(--blue-dark) 100%);
+    filter: saturate(114%) contrast(102%) blur(1.05px);
+  }
+}
+
+@media (max-width: 640px) {
+  body::before { filter: saturate(114%) contrast(102%) blur(1.15px); }
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  body::before { filter: saturate(110%) contrast(102%) blur(0.4px); }
+}
+
+/* ========= Utilidades / Layout ========= */
+
+.icon {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 1.5rem;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+.container { max-width: 1140px; margin: 0 auto; padding: 0 1rem; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
+
+.section { padding: 4rem 0; }
+.section.alternate { background: transparent; }
+
+header, main, footer, section, .section, .heroSection, .layout, .wrapper {
+  background: transparent !important;
+  position: relative;
+  z-index: 1;
+}
+
+.center { text-align: center; }
+
+/* Botões */
+.btn-primary {
+  background: var(--blue-base);
+  color: #fff;
+  padding: .75rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background .3s;
+}
+.btn-primary:hover { background: var(--blue-light); }
+
+.btn-secondary {
+  background: var(--accent);
+  color: #fff;
+  padding: .75rem 1.5rem;
+  border-radius: 4px;
+  transition: opacity .3s;
+}
+.btn-secondary:hover { opacity: .9; }
+
+.btn-outline {
+  background: var(--accent);
+  border: 2px solid var(--accent);
+  color: #fff;
+  padding: .75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background .2s, color .2s;
+  text-decoration: none;
+}
+.btn-outline:hover { background: #fff; color: var(--accent); }
+
+/* Inputs herdam a fonte */
+input, textarea, button { font-family: inherit; font-size: inherit; }

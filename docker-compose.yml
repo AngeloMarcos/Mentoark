@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  sitetech:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: mentoark/sitetech:latest
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+      - TZ=America/Sao_Paulo
+    
+    # IMPORTANTE: Conexão direta com a rede Traefik
+    networks:
+      - traefik
+      
+    labels:
+      # Habilita o Traefik para este serviço
+      traefik.enable: "true"
+      # Define a regra de host (URL)
+      traefik.http.routers.sitetech.rule: "Host(`site.mentoark.com.br`)"
+      # Define o ponto de entrada (HTTPS)
+      traefik.http.routers.sitetech.entrypoints: "websecure"
+      # Habilita TLS
+      traefik.http.routers.sitetech.tls: "true"
+      # Define o resolvedor de certificado (Let's Encrypt)
+      traefik.http.routers.sitetech.tls.certresolver: "letsencrypt"
+      # Define a porta interna do contêiner (Next.js)
+      traefik.http.services.sitetech.loadbalancer.server.port: "3000"
+
+networks:
+  traefik:
+    # Garante que ele use a rede Traefik existente no seu VPS
+    external: true

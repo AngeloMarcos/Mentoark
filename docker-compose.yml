@@ -11,26 +11,34 @@ services:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
       - TZ=America/Sao_Paulo
-    
-    # IMPORTANTE: Conexão direta com a rede Traefik
     networks:
       - traefik
-      
+
+    # (opcional) o Traefik/stack só marca como "healthy" quando a app responde
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
     labels:
-      # Habilita o Traefik para este serviço
       traefik.enable: "true"
-      # Define a regra de host (URL)
+
+      # Router HTTPS (principal)
       traefik.http.routers.sitetech.rule: "Host(`site.mentoark.com.br`)"
-      # Define o ponto de entrada (HTTPS)
       traefik.http.routers.sitetech.entrypoints: "websecure"
-      # Habilita TLS
       traefik.http.routers.sitetech.tls: "true"
-      # Define o resolvedor de certificado (Let's Encrypt)
       traefik.http.routers.sitetech.tls.certresolver: "letsencrypt"
-      # Define a porta interna do contêiner (Next.js)
+
+      # Serviço interno escutando na 3000
       traefik.http.services.sitetech.loadbalancer.server.port: "3000"
+
+      # Router HTTP -> redireciona para HTTPS
+      traefik.http.routers.sitetech-web.rule: "Host(`site.mentoark.com.br`)"
+      traefik.http.routers.sitetech-web.entrypoints: "web"
+      traefik.http.routers.sitetech-web.middlewares: "sitetech-redirect"
+      traefik.http.middlewares.sitetech-redirect.redirectscheme.scheme: "https"
 
 networks:
   traefik:
-    # Garante que ele use a rede Traefik existente no seu VPS
     external: true

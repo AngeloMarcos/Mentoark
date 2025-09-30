@@ -1,24 +1,27 @@
-import React from 'react';
+// frontend/components/HowItWorks.tsx
+import type { FC } from 'react';
 
-const steps = [
+type Step = { n: string; title: string; desc: string };
+
+const steps: Step[] = [
   {
     n: '1',
     title: 'Conectamos seu WhatsApp',
-    desc: 'Integração oficial via API (provedor) ou bridge apropriada, com políticas anti-bloqueio.'
+    desc: 'Integração oficial via API (provedor) ou bridge apropriada, com políticas anti-bloqueio.',
   },
   {
     n: '2',
     title: 'Desenhamos o fluxo no n8n',
-    desc: 'Captura de mensagens, NLP/IA opcional, regras de negócio, agendamentos e integrações.'
+    desc: 'Captura de mensagens, NLP/IA opcional, regras de negócio, agendamentos e integrações.',
   },
   {
     n: '3',
     title: 'Integrações e Data',
-    desc: 'Google Calendar, Planilhas/CRMs, gateways de pagamento e relatórios de performance.'
+    desc: 'Google Calendar, Planilhas/CRMs, gateways de pagamento e relatórios de performance.',
   },
 ];
 
-export const HowItWorks: React.FC = () => {
+const HowItWorks: FC = () => {
   return (
     <section id="como-funciona" className="section alternate">
       <div className="container">
@@ -26,15 +29,21 @@ export const HowItWorks: React.FC = () => {
         <div className="grid-3">
           {steps.map((s) => (
             <div key={s.n} className="card">
-              <div style={{
-                width: 42, height: 42, borderRadius: 999,
-                display: 'grid', placeItems: 'center', marginBottom: 12,
-                background: 'rgba(255,255,255,.08)'
-              }}>
+              <div
+                style={{
+                  width: 42,
+                  height: 42,
+                  borderRadius: 999,
+                  display: 'grid',
+                  placeItems: 'center',
+                  marginBottom: 12,
+                  background: 'rgba(255,255,255,.08)',
+                }}
+              >
                 <strong>{s.n}</strong>
               </div>
               <h3>{s.title}</h3>
-              <p style={{ opacity: .85 }}>{s.desc}</p>
+              <p style={{ opacity: 0.85 }}>{s.desc}</p>
             </div>
           ))}
         </div>
@@ -42,3 +51,5 @@ export const HowItWorks: React.FC = () => {
     </section>
   );
 };
+
+export default HowItWorks;

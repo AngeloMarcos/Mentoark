@@ -1,0 +1,30 @@
+.container {
+  max-width: var(--max-w);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+.section {
+  padding-block: var(--space-16);
+}
+
+.card {
+  background: var(--panel);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  border: 1px solid rgba(255,255,255,.06);
+}
+
+.h1 { font-size: clamp(2rem, 1rem + 3vw, 3.25rem); font-weight: 800; }
+.h2 { font-size: clamp(1.5rem, .5rem + 2vw, 2.25rem); font-weight: 700; }
+.p  { color: var(--muted); line-height: 1.7; }
+
+.btn {
+  display:inline-flex; gap:.6rem; align-items:center;
+  border-radius: 999px;
+  padding: .8rem 1.2rem;
+  color: #0b0d13; background: #fff;
+  font-weight: 600; text-decoration: none;
+}
+.btn--primary { background: linear-gradient(90deg, var(--brand-1), var(--brand-2)); color: white; }
+.btn--ghost { background: transparent; color: var(--text); border:1px solid rgba(255,255,255,.15); }

@@ -1,0 +1,36 @@
+:root {
+  /* Cores base (ajuste depois para casar com o PSD) */
+  --bg: #0b0d13;
+  --panel: #111525;
+  --text: #eaf2ff;
+  --muted: #a7b6c9;
+  --brand-1: #6c00ff;
+  --brand-2: #ff2d95;
+  --brand-3: #00e1ff;
+
+  /* Gradiente do hero (provisório) */
+  --hero-gradient: radial-gradient(60% 60% at 80% 20%,
+    rgba(108,0,255,.35) 0%,
+    rgba(255,45,149,.25) 45%,
+    rgba(0,225,255,.18) 80%,
+    transparent 100%);
+
+  /* Raios / sombras / radius */
+  --radius-xl: 24px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+
+  /* Espaçamentos */
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+
+  /* Max widths */
+  --max-w: 1200px;
+}

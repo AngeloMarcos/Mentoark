@@ -1,11 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* reset e imports */
+*{ box-sizing:border-box; }
+html, body{ height:100%; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial;
+}
 
-/* base */
-:root { color-scheme: dark; }
-html, body { height: 100%; }
-body { @apply bg-slate-950 text-slate-100; }
+/* importe os tokens e utilitários usando o caminho correto */
+@import "./_styles/tokens.css";
+@import "./_styles/utilities.css";
+
 
 /* helpers */
 .section {

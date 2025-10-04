@@ -29,33 +29,33 @@ export default function Superpowers() {
   return (
     <section id="superpoderes" className="section">
       <Container>
-        <h2 className="h2" style={{ marginBottom: "var(--space-8)" }}>
-          Quatro superpoderes
-        </h2>
-        <div
-          style={{
-            display: "grid",
-            gap: "1rem",
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-          }}
-        >
-          {items.map((it) => (
-            <div
-              key={it.title}
-              className="card"
-              style={{
-                padding: "1.5rem",
-                background: "rgba(255, 255, 255, 0.05)", // torna o card um pouco mais claro
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-              }}
-            >
-              <Image src={it.icon} alt="" width={32} height={32} />
-              <h3 style={{ marginTop: "1rem", fontWeight: 700 }}>{it.title}</h3>
-              <p className="p" style={{ marginTop: ".5rem" }}>
-                {it.desc}
-              </p>
-            </div>
-          ))}
+        <div style={{ maxWidth: "960px", margin: "0 auto", textAlign: "center" }}>
+          <h2 className="h2" style={{ marginBottom: "var(--space-8)" }}>
+            Quatro superpoderes
+          </h2>
+          <div
+            style={{
+              display: "grid",
+              gap: "1rem",
+              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+            }}
+          >
+            {items.map((it) => (
+              <div
+                key={it.title}
+                className="card"
+                style={{
+                  padding: "1.5rem",
+                  background: "rgba(255, 255, 255, 0.05)",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                }}
+              >
+                <Image src={it.icon} alt="" width={32} height={32} />
+                <h3 style={{ marginTop: "1rem", fontWeight: 700 }}>{it.title}</h3>
+                <p className="p" style={{ marginTop: ".5rem" }}>{it.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </Container>
     </section>

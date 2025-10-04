@@ -5,29 +5,35 @@ export type AutoItem = {
   icon: string; // caminho no /public
 };
 
-export const automacaoData: AutoItem[] = [
+// app/(site)/data/AutomacaoData.ts
+export const FLOW_STEPS = [
   {
-    slug: "entendimento",
-    title: "Entendimento 360º",
-    descricao: "Texto curto do card…",
-    icon: "/freepik/icons/vision.png",
+    title: "Entrada",
+    icon: "/flow/step-entrada.svg",
+    desc:
+      "Captação Multimídia: O n8n atua como o roteador central que recebe a mensagem do cliente (áudio, texto, legenda de imagem) e a processa para a IA. Isso garante que nenhum dado se perca na comunicação inicial.",
   },
   {
-    slug: "memoria",
-    title: "Memória Inesquecível",
-    descricao: "Texto curto do card…",
-    icon: "/freepik/icons/memory.png",
+    title: "Processamento",
+    icon: "/flow/step-processamento.svg",
+    desc:
+      "Lógica Inteligente: O agente principal (Gerente) classifica a demanda e usa a lógica do n8n (Switch Nodes) para decidir: 1) Precisa de uma ferramenta? 2) Qual agente especialista deve responder?",
   },
   {
-    slug: "agentes",
-    title: "Agentes Especializados",
-    descricao: "Texto curto do card…",
-    icon: "/freepik/icons/split.png",
+    title: "Conhecimento",
+    icon: "/flow/step-conhecimento.svg",
+    desc:
+      "Acesso em Tempo Real: Aqui a IA consulta o Supabase Vector Store (RAG), o Redis (Anti-Duplicidade) ou outras APIs do seu negócio. É a fonte da resposta precisa e atualizada.",
   },
   {
-    slug: "rag",
-    title: "Conhecimento Ilimitado (RAG)",
-    descricao: "Texto curto do card…",
-    icon: "/freepik/icons/db.png",
+    title: "Saída + Memória",
+    icon: "/flow/step-saida.svg",
+    desc:
+      "Entrega e Aprendizado: O n8n envia a resposta final, formatada para o WhatsApp (Divisão de Mensagens), e simultaneamente armazena o histórico no Postgres (Memória de Longo Prazo) para contextualizar futuras conversas.",
   },
 ];
+
+export const FLOW_TITLE = "Fluxo do Agente";
+export const FLOW_SUB =
+  "Uma visão clara das etapas: Entrada → Processamento → Conhecimento → Saída + Memória.";
+

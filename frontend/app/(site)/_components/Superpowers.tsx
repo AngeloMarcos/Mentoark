@@ -2,12 +2,31 @@
 import Image from "next/image";
 // import Container from "./Container";  // use só se o Container estiver “limpo”
 
-type Item = { icon: string; title: string; desc: string };
-const items: Item[] = [
-  { icon: "/superpowers/entendimento360.png", title: "Entendimento 360°",  desc: "Texto, voz e visão — o agente entende como um humano." },
-  { icon: "/superpowers/memoria.png",         title: "Memória Inesquecível", desc: "Contexto persistente e seguro: lembretes, preferências e histórico." },
-  { icon: "/superpowers/agentes.png",         title: "Agentes Especializados", desc: "Roteamento para especialistas (Amanda, Gabriela, etc.)." },
-  { icon: "/superpowers/rag.png",             title: "Conhecimento Ilimitado (RAG)", desc: "Busca em documentos, bases e APIs para respostas atualizadas." },
+const items = [
+  {
+    icon: "/superpowers/entendimento360.png",
+    title: "Entendimento 360º",
+    desc:
+      "Não perca mais o contexto. Nosso agente usa IA para processar áudios e analisar legendas em imagens, convertendo tudo em informação acionável. Garantia de triagem correta em qualquer formato de input.",
+  },
+  {
+    icon: "/superpowers/memoria.png",
+    title: "Memória Inesquecível",
+    desc:
+      "O agente se lembra de todas as interações passadas, graças ao armazenamento em Postgres. Além disso, a lógica de Anti-Duplicidade (Redis) evita que a IA “atropelle” o cliente que envia várias mensagens seguidas.",
+  },
+  {
+    icon: "/superpowers/agentes.png",
+    title: "Agentes Especializados",
+    desc:
+      "Diga adeus ao “Fale com o setor X”. O Gerente Setor classifica a intenção real da mensagem e aciona o agente certo (Vendas, Suporte, FAQ), garantindo que a conversa tenha o foco e o tom de voz corretos.",
+  },
+  {
+    icon: "/superpowers/rag.png",
+    title: "Conhecimento Ilimitado (RAG)",
+    desc:
+      "Nosso diferencial: O agente consulta sua Base de Conhecimento em tempo real. Não inventamos respostas. Obtenha precisão cirúrgica sobre seus produtos, preços e políticas. Fácil de treinar, basta anexar um documento.",
+  },
 ];
 
 export default function Superpowers() {

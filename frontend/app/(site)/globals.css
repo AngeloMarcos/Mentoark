@@ -1,4 +1,26 @@
-/* reset e imports */
+/* frontend/app/(site)/globals.css */
+
+/* já deve existir no topo: */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ...seus imports/tokens... */
+
+/* utilitários custom para fundos */
+@layer utilities {
+  .bg-grid-soft {
+    background-image: url('/bg/grid-soft.png');
+    background-size: cover;
+    background-position: center;
+  }
+  .bg-gradient-cta {
+    background-image: url('/bg/gradient-azul-laranja.png');
+    background-size: cover;
+    background-position: center;
+  }
+}
+
 *{ box-sizing:border-box; }
 html, body{ height:100%; }
 body{
@@ -8,24 +30,8 @@ body{
   font-family:system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial;
 }
 
-/* importe os tokens e utilitários usando o caminho correto */
+/* tokens + utilities do próprio projeto */
 @import "./_styles/tokens.css";
 @import "./_styles/utilities.css";
 
-
-/* helpers */
-.section {
-  @apply py-12 md:py-16;
-}
-.h1 { @apply text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight; }
-.h2 { @apply text-2xl md:text-3xl font-semibold; }
-.lead { @apply text-slate-300/90; }
-.card {
-  @apply rounded-2xl border border-white/10 bg-white/5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md hover:bg-white/10;
-}
-.btn {
-  @apply inline-flex items-center gap-2 rounded-xl px-4 py-2 font-medium bg-teal-500 text-slate-900 hover:bg-teal-400 transition;
-}
-.badge {
-  @apply inline-flex items-center rounded-lg px-2.5 py-0.5 text-xs font-medium bg-white/10 border border-white/10;
-}
+/* (o restante do seu arquivo pode ficar como está, inclusive regras com @apply) */

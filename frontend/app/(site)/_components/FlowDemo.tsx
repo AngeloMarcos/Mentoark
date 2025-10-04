@@ -28,10 +28,11 @@ export default function FlowDemo() {
               gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
             }}
           >
-            <FlowStep title="Entrada" subtitle="Texto / Áudio / Imagem" />
-            <FlowStep title="Processamento" subtitle="Gerente Setorial + RAG/Ferramentas" />
-            <FlowStep title="Conhecimento" subtitle="Busca em bases e APIs" />
-            <FlowStep title="Saída + Memória" subtitle="Resposta e histórico" />
+           <FlowStep title="Entrada"         desc="Texto / Áudio / Imagem"             icon="/flow/step-entrada.svg" />
+            <FlowStep title="Processamento"   desc="Gerente setorial + RAG/Ferramentas" icon="/flow/step-processamento.svg" />
+            <FlowStep title="Conhecimento"    desc="Bases, documentos e APIs"           icon="/flow/step-conhecimento.svg" />
+            <FlowStep title="Saída + Memória" desc="Resposta e histórico"               icon="/flow/step-saida.svg" />
+
           </div>
         </div>
       </Container>

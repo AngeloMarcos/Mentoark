@@ -33,7 +33,7 @@ export default function CardsInterativos({ onSelect }: CardsInterativosProps) {
       <p className="lead mt-2 text-center">
         Clique em cada card para visualizar a descrição e um detalhe técnico de como o agente funciona.
       </p>
-      <div style={{ marginTop: "var(--space-8)" }} className="grid gap-4 md:grid-cols-2">
+      <div style={{ marginTop: "var(--space-8)" }}className="grid gap-6 md:grid-cols-2">
         {automacaoData.map((poder, i) => {
           const expanded = open === poder.id;
           return (

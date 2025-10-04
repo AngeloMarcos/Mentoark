@@ -1,4 +1,3 @@
-// app/(site)/HeroSimulacao.tsx
 "use client";
 
 import Image from "next/image";
@@ -11,53 +10,75 @@ export default function HeroSimulacao() {
   const [messages, setMessages] = useState<string[]>([]);
 
   useEffect(() => {
-    if (run) {
-      setMessages([input]);
-      const t1 = setTimeout(() => {
-        setMessages((prev) => [...prev, "Analisando contexto…"]);
-      }, 1000);
-      const t2 = setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          `Resposta para "${input || "sua mensagem"}" gerada!`,
-        ]);
-      }, 2000);
-      return () => {
-        clearTimeout(t1);
-        clearTimeout(t2);
-      };
-    }
+    if (!run) return;
+
+    setMessages([input || "Olá!"]);
+    const t1 = setTimeout(() => {
+      setMessages((prev) => [...prev, "Analisando contexto…"]);
+    }, 900);
+    const t2 = setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        `Resposta para “${input || "sua mensagem"}” gerada!`,
+      ]);
+    }, 1900);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
   }, [run, input]);
 
+  const handleSimular = () => {
+    if (!input.trim()) return;
+    // reinicia a animação de forma confiável
+    setRun(false);
+    setMessages([]);
+    setTimeout(() => setRun(true), 10);
+  };
+
   return (
-    <section className="section grid gap-10 md:grid-cols-2 items-center">
+    <section className="section grid items-center gap-10 md:grid-cols-2">
+      {/* Texto */}
       <div>
         <span className="badge">Demonstração</span>
-        <h1 className="h1 mt-3">Automação inteligente, visual e explicável</h1>
+
+        <h1 className="h1 mt-3">
+          Automação inteligente, visual e explicável
+        </h1>
+
         <p className="lead mt-4">
-          Mostre o fluxo com um mockup do Freepik e uma simulação rápida que ilumina as etapas do agente.
+          Mostre o fluxo com um mockup e uma simulação rápida que ilumina as
+          etapas do agente.
         </p>
-        <div className="mt-6 flex gap-3 max-w-md">
+
+        <div className="mt-6 flex max-w-md gap-3">
+          <label htmlFor="simulacao-input" className="sr-only">
+            Digite sua pergunta
+          </label>
           <input
+            id="simulacao-input"
             type="text"
-            className="flex-1 rounded-xl px-4 py-2 text-slate-900"
+            className="flex-1 rounded-xl border border-white/10 bg-white px-4 py-2 text-slate-900 placeholder:text-slate-500"
             placeholder="Digite sua pergunta..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-          />
-          <button
-            className="btn btn--primary"
-            onClick={() => {
-              if (input.trim()) {
-                setRun(false);
-                setTimeout(() => setRun(true), 20);
-              }
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSimular();
             }}
+          />
+
+          <button
+            type="button"
+            className="btn btn--primary"
+            onClick={handleSimular}
+            aria-label="Executar simulação"
           >
             Simular
           </button>
         </div>
-        <div className="mt-6 grid grid-cols-2 gap-3 text-sm text-slate-300/80">
+
+        <div className="mt-6 grid grid-cols-2 gap-3 text-sm text-white/80">
           <div className="card p-3">
             <div className="font-semibold">Entrada</div>
             <div>Texto / Áudio / Imagem</div>
@@ -68,33 +89,53 @@ export default function HeroSimulacao() {
           </div>
         </div>
       </div>
+
+      {/* Mockup + balões */}
       <div className="relative">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
           className="relative mx-auto w-[280px] sm:w-[340px]"
         >
           <Image
-            src="/freepik/mockups/phone.png"
-            alt="Mockup de telefone"
+            // coloque o arquivo em /public/hero/hero-mockup.png
+            src="/hero/hero-mockup.png"
+            alt="Mockup do fluxo conversacional"
             width={680}
             height={1400}
-            className="w-full h-auto drop-shadow-[0_15px_35px_rgba(0,0,0,.45)]"
+            className="h-auto w-full rounded-2xl border border-white/10 object-cover shadow-2xl"
             priority
           />
-          <div className="absolute inset-0 flex flex-col justify-end p-4 space-y-2 pointer-events-none">
+
+          {/* Balões animados */}
+          <div className="pointer-events-none absolute inset-0 flex flex-col justify-end space-y-2 p-4">
             {messages.map((msg, index) => (
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
+                key={`${msg}-${index}`}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.5 }}
-                className="self-end max-w-[70%] rounded-lg px-3 py-2 text-sm bg-brand-2 text-white shadow"
+                transition={{ delay: index * 0.45 }}
+                className="self-end max-w-[75%] rounded-lg bg-brand2 px-3 py-2 text-sm text-white shadow"
               >
                 {msg}
               </motion.div>
             ))}
+
+            {/* indicador de digitação (aparece enquanto processa) */}
+            {run && messages.length === 1 && (
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="self-end max-w-[60%] rounded-lg bg-white/10 px-3 py-2 text-sm text-white/80 backdrop-blur"
+              >
+                <span className="inline-flex items-center gap-1">
+                  <span className="inline-block h-1 w-1 animate-bounce rounded-full bg-white/80 [animation-delay:0ms]" />
+                  <span className="inline-block h-1 w-1 animate-bounce rounded-full bg-white/80 [animation-delay:120ms]" />
+                  <span className="inline-block h-1 w-1 animate-bounce rounded-full bg-white/80 [animation-delay:240ms]" />
+                </span>
+              </motion.div>
+            )}
           </div>
         </motion.div>
       </div>

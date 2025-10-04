@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="300" viewBox="0 0 1400 300">
+  <defs>
+    <style>
+      .brand { font-family: Inter, "SF Pro Display", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif; 
+               font-weight: 700; letter-spacing: 0.5px; }
+    </style>
+  </defs>
+  <rect x="0" y="0" width="1400" height="300" fill="none"/>
+  <text x="50" y="200" class="brand" font-size="180" fill="#ffffff">Mentoark.ai</text>
+</svg>

@@ -1,37 +1,33 @@
-// app/(site)/page.tsx
-"use client";
+'use client';
 
-import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useState } from 'react';
 
-const HeroSimulacao     = dynamic(() => import("./HeroSimulacao"),    { ssr: true });
-const CardsInterativos  = dynamic(() => import("./CardsInterativos"), { ssr: true });
-const DiagramaFluxo     = dynamic(() => import("./DiagramaFluxo"),    { ssr: true });
-const CTASection        = dynamic(() => import("./CTASection"),        { ssr: true });
-const AtribuicaoFreepik = dynamic(() => import("./AtribuicaoFreepik"), { ssr: true });
+// caminhos certos, de acordo com a estrutura do seu print
+import HeroSimulacao from './HeroSimulacao';
+import CardsInterativos from './CardsInterativos';
+import FluxoDemo from './_components/FlowDemo';
+import Superpoderes from './_components/Superpowers';
 
 export default function Page() {
-  // id do superpoder atualmente selecionado (para sincronizar com o diagrama)
   const [activeId, setActiveId] = useState<string | null>(null);
 
   return (
-    <main>
-      <section id="hero">
+    <main className="mx-auto max-w-6xl px-4 py-10">
+      <section id="hero" className="mb-16">
         <HeroSimulacao />
       </section>
-      <section id="superpoderes">
-        <CardsInterativos onSelect={setActiveId} />
+
+      <section id="fluxo" className="mb-16">
+        <FluxoDemo activeId={activeId} onStepChange={setActiveId} />
       </section>
-      <section id="fluxo">
-        <DiagramaFluxo activeId={activeId} />
+
+      <section id="superpoderes" className="mb-16">
+        <Superpoderes />
       </section>
-      <section id="cta">
-        <CTASection />
+
+      <section id="demos" className="mb-24">
+        <CardsInterativos />
       </section>
-      {/* rodapé de atribuição do Freepik */}
-      <footer className="mt-8">
-        <AtribuicaoFreepik />
-      </footer>
     </main>
   );
 }

@@ -19,13 +19,12 @@ export default function FlowDemo() {
             Uma visão clara das etapas: Entrada → Processamento → Conhecimento → Saída + Memória.
           </p>
 
-          {/* Grid responsivo de etapas */}
-                  <div className="grid gap-6 md:grid-cols-4 items-stretch">
-            <FlowStep title="Entrada"         desc="Texto / Áudio / Imagem"             icon="/flow/step-entrada.svg" />
-            <FlowStep title="Processamento"   desc="Gerente setorial + RAG/Ferramentas" icon="/flow/step-processamento.svg" />
-            <FlowStep title="Conhecimento"    desc="Bases, documentos e APIs"           icon="/flow/step-conhecimento.svg" />
-            <FlowStep title="Saída + Memória" desc="Resposta e histórico"               icon="/flow/step-saida.svg" />
-          </div>
+           <div className="grid gap-6 md:grid-cols-4 items-stretch">
+      <FlowStep title="Entrada"         desc="Texto / Áudio / Imagem"             icon="/flow/step-entrada.svg" />
+      <FlowStep title="Processamento"   desc="Gerente setorial + RAG/Ferramentas" icon="/flow/step-processamento.svg" />
+      <FlowStep title="Conhecimento"    desc="Bases, documentos e APIs"           icon="/flow/step-conhecimento.svg" />
+      <FlowStep title="Saída + Memória" desc="Resposta e histórico"               icon="/flow/step-saida.svg" />
+    </div>
 
         </div>
       </Container>

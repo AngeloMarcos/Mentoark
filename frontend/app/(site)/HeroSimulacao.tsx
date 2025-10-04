@@ -1,4 +1,3 @@
-// frontend/app/(site)/_components/HeroSimulacao.tsx
 "use client";
 
 import Image from "next/image";
@@ -26,33 +25,22 @@ export default function HeroSimulacao() {
   };
 
   return (
-    <section className="section grid items-center gap-14 md:grid-cols-2">
-      {/* Coluna de texto */}
+    <section className="section hero grid items-center gap-14 md:grid-cols-2">
+      {/* Texto */}
       <div>
         <span className="badge">Demonstração</span>
 
-        {/* H1 com gradiente do botão, tracking e leading melhores */}
-        <h1
-          className="
-            mt-4 font-extrabold tracking-tight leading-[1.05]
-            text-4xl sm:text-5xl md:text-6xl lg:text-7xl
-            text-transparent bg-clip-text
-            bg-gradient-to-r from-[#7c3aed] to-[#db2777]
-            drop-shadow-[0_2px_12px_rgba(219,39,119,.18)]
-          "
-        >
+        <h1 className="h1 mt-4 text-gradient-primary">
           Automação inteligente, visual e explicável
         </h1>
 
-        {/* Parágrafo mais legível */}
-        <p className="mt-6 text-base md:text-lg text-white/80 max-w-[60ch]">
+        <p className="lead mt-6 max-w-[60ch]">
           Nosso Agente 24/7 vai além do &apos;Olá, digite 1&apos;. Ele é construído com n8n e IA de
           ponta para entender a intenção real, interagir com sua base de conhecimento e garantir
           que sua equipe foque no que é mais importante. Veja como a complexidade se torna
           simplicidade em um clique.
         </p>
 
-        {/* Campo + botão */}
         <div className="mt-6 flex max-w-md gap-3">
           <label htmlFor="simulacao-input" className="sr-only">Digite sua pergunta</label>
           <input
@@ -65,39 +53,30 @@ export default function HeroSimulacao() {
             onKeyDown={(e) => e.key === "Enter" && handleSimular()}
             autoComplete="off"
           />
-          <button
-            type="button"
-            className="btn btn--primary"
-            onClick={handleSimular}
-            aria-label="Executar simulação"
-          >
+          <button type="button" className="btn btn--primary" onClick={handleSimular}>
             Simular
           </button>
         </div>
 
-        {/* Etiquetas */}
         <div className="mt-6 grid grid-cols-2 gap-3 text-sm text-white/80">
-          <div className="card p-3">
+          <div className="card-accent-orange p-3">
             <div className="font-semibold">Entrada</div>
             <div>Texto / Áudio / Imagem</div>
           </div>
-          <div className="card p-3">
+          <div className="card-accent-orange p-3">
             <div className="font-semibold">Saída</div>
             <div>Resposta + Memória</div>
           </div>
         </div>
       </div>
 
-      {/* Coluna do mockup (dobrado) */}
+      {/* Mockup + balões */}
       <div className="relative">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="
-            relative mx-auto
-            w-[420px] sm:w-[560px] lg:w-[680px]   /* era 280/340 → ~2x */
-          "
+          className="relative mx-auto hero-mockup"
         >
           <Image
             src="/hero/hero-mockup.png"
@@ -108,7 +87,6 @@ export default function HeroSimulacao() {
             priority
           />
 
-          {/* Balões */}
           <div className="pointer-events-none absolute inset-0 flex flex-col justify-end space-y-2 p-4">
             {messages.map((msg, i) => (
               <motion.div

@@ -2,6 +2,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 
+import "./_styles/globals.css";
 
 export const metadata: Metadata = {
   title: "Mentoark — Automação inteligente",

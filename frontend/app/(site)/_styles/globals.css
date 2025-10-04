@@ -1,0 +1,130 @@
+/* ===== Fundo com brilhos azuis (fixo, atrás de tudo) ===== */
+body::before{
+  content:"";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 15% 10%, rgba(37,99,235,.12) 0%, transparent 60%),
+    radial-gradient(50% 45% at 85% 20%, rgba(34,211,238,.08) 0%, transparent 60%);
+}
+
+/* ========== BASE/TOKENS ========== */
+:root {
+  /* Base (AZUL) */
+  --bg: #0a1024;      /* fundo da página */
+  --panel: #0d1a3a;   /* painéis/cards se usar */
+
+  /* Texto com contraste */
+  --text-strong: #ffffff;      /* títulos */
+  --text: #e8eefc;             /* corpo */
+  --text-soft: #b6c3d8;        /* descrições */
+  --text-muted: #8fa0b8;       /* legendas/help */
+
+  /* Marcas */
+  --brand-1: #6c00ff;
+  --brand-2: #ff2d95;
+  --brand-3: #00e1ff;
+  --brand-orange: #ff6600;
+
+  /* Gradientes */
+  --hero-gradient: radial-gradient(60% 60% at 80% 20%,
+    rgba(108,0,255,.35) 0%,
+    rgba(255,45,149,.25) 45%,
+    rgba(0,225,255,.18) 80%,
+    transparent 100%);
+  --grad-primary: linear-gradient(90deg, var(--brand-1) 0%, var(--brand-2) 100%);
+  --grad-orange-soft: radial-gradient(120% 100% at 0% 0%, rgba(255,102,0,.14) 0%, transparent 55%);
+
+  /* Raios / sombras */
+  --radius-xl: 24px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+
+  /* Espaços */
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+
+  /* Larguras e tipografia responsiva */
+  --max-w: 1200px;
+  --fs-h1: clamp(2.25rem, 1.5rem + 3.5vw, 4.25rem);
+  --fs-h2: clamp(1.5rem, 1.1rem + 1.8vw, 2.25rem);
+  --fs-body: clamp(.98rem, .95rem + .25vw, 1.125rem);
+}
+
+html, body { background: var(--bg) !important; color: var(--text); }
+
+/* ========== TIPOGRAFIA ========== */
+.h1 { font-size: var(--fs-h1); line-height: 1.05; font-weight: 800; color: var(--text-strong); letter-spacing: -0.01em; }
+.h2 { font-size: var(--fs-h2); line-height: 1.12; font-weight: 800; color: var(--text-strong); }
+.lead { font-size: var(--fs-body); color: var(--text); }
+.p { color: var(--text-soft); }
+
+/* H1 com o mesmo gradiente do botão */
+.text-gradient-primary{
+  background-image: var(--grad-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 2px 12px rgba(219,39,119,.16);
+}
+
+/* ========== BOTÃO ========== */
+.btn--primary{
+  background-image: var(--grad-primary);
+  color: #fff;
+  border-radius: 999px;
+  padding: .6rem 1.1rem;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(111, 0, 255, .35);
+  transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+}
+.btn--primary:hover{ transform: translateY(-1px); filter: brightness(1.06); }
+.btn--primary:active{ transform: translateY(0); }
+
+/* ========== CARDS COM ACENTO LARANJA (mantidos) ========== */
+.card-accent-orange{
+  background: rgba(255,255,255,.05);
+  background-image: var(--grad-orange-soft);
+  border: 1px solid rgba(255,255,255,.08);
+  border-color: color-mix(in oklab, var(--brand-orange) 36%, transparent);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 10px 30px rgba(0,0,0,.25);
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.card-accent-orange:hover{
+  border-color: color-mix(in oklab, var(--brand-orange) 56%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--brand-orange) 20%, transparent),
+    0 16px 44px rgba(0,0,0,.35);
+  transform: translateY(-1px);
+}
+.card-accent-orange h3{ color: var(--text-strong); }
+.card-accent-orange p{ color: var(--text); opacity: .92; }
+.card-accent-orange .muted{ color: var(--text-muted); }
+
+/* ========== LAYOUT/SEÇÕES ========== */
+.section{ padding-block: clamp(2.5rem, 6vw, 5rem); }
+
+/* Tamanho responsivo do mockup do HERO */
+.hero-mockup{ width: clamp(320px, 70vw, 680px); }
+@media (max-width: 768px){
+  .section.hero{ padding-top: 2rem; }
+  .hero-mockup{ margin-top: var(--space-6); width: clamp(280px, 86vw, 520px); }
+  .h1{ letter-spacing: -0.015em; }
+  .lead{ font-size: 1rem; }
+}
+
+/* Tipografia dos cards em mobile */
+.card-accent-orange h3{ font-size: clamp(1rem, .9rem + .6vw, 1.125rem); }
+.card-accent-orange p{ font-size: clamp(.9rem, .85rem + .3vw, 1rem); line-height: 1.58; }

@@ -1,4 +1,3 @@
-// frontend/app/(site)/_components/FlowDemo.tsx
 import Container from "./Container";
 import FlowStep from "./FlowStep";
 
@@ -7,9 +6,7 @@ export default function FlowDemo() {
     <section
       id="fluxo"
       className="section"
-      style={{
-        background: "linear-gradient(180deg, rgba(255,255,255,.02), transparent)",
-      }}
+      style={{ background: "linear-gradient(180deg, rgba(255,255,255,.02), transparent)" }}
     >
       <Container>
         <div className="mx-auto max-w-[960px] text-center">
@@ -24,19 +21,16 @@ export default function FlowDemo() {
               icon="/flow/step-entrada.svg"
               desc="Captação Multimídia: O n8n atua como o roteador central que recebe a mensagem do cliente (áudio, texto, legenda de imagem) e a processa para a IA. Isso garante que nenhum dado se perca na comunicação inicial."
             />
-
             <FlowStep
               title="Processamento"
               icon="/flow/step-processamento.svg"
               desc="Lógica Inteligente: O agente principal (Gerente) classifica a demanda e usa a lógica do n8n (Switch Nodes) para decidir: 1) Precisa de uma ferramenta? 2) Qual agente especialista deve responder?"
             />
-
             <FlowStep
               title="Conhecimento"
               icon="/flow/step-conhecimento.svg"
               desc="Acesso em Tempo Real: Aqui a IA consulta o Supabase Vector Store (RAG), o Redis (Anti-Duplicidade) ou outras APIs do seu negócio. É a fonte da resposta precisa e atualizada."
             />
-
             <FlowStep
               title="Saída + Memória"
               icon="/flow/step-saida.svg"

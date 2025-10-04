@@ -1,26 +1,36 @@
 :root {
-  /* Cores base (ajuste depois para casar com o PSD) */
+  /* Base */
   --bg: #0b0d13;
   --panel: #111525;
-  --text: #eaf2ff;
-  --muted: #a7b6c9;
+
+  /* Texto com contraste */
+  --text-strong: #ffffff;           /* títulos */
+  --text: #e8eefc;                  /* corpo principal */
+  --text-soft: #b6c3d8;             /* descrições */
+  --text-muted: #8fa0b8;            /* legendas/help */
+
+  /* Marcas */
   --brand-1: #6c00ff;
   --brand-2: #ff2d95;
   --brand-3: #00e1ff;
+  --brand-orange: #ff6600;
 
-  /* Gradiente do hero (provisório) */
+  /* Gradientes */
   --hero-gradient: radial-gradient(60% 60% at 80% 20%,
     rgba(108,0,255,.35) 0%,
     rgba(255,45,149,.25) 45%,
     rgba(0,225,255,.18) 80%,
     transparent 100%);
 
-  /* Raios / sombras / radius */
+  --grad-primary: linear-gradient(90deg, var(--brand-1) 0%, var(--brand-2) 100%);
+  --grad-orange-soft: radial-gradient(120% 100% at 0% 0%, rgba(255,102,0,.14) 0%, transparent 55%);
+
+  /* Raios / sombras */
   --radius-xl: 24px;
   --radius-lg: 16px;
   --radius-md: 12px;
 
-  /* Espaçamentos */
+  /* Espaços */
   --space-1: .25rem;
   --space-2: .5rem;
   --space-3: .75rem;
@@ -31,6 +41,14 @@
   --space-16: 4rem;
   --space-24: 6rem;
 
-  /* Max widths */
+  /* Largura máx */
   --max-w: 1200px;
+
+  /* Tipografia responsiva */
+  --fs-h1: clamp(2.25rem, 1.5rem + 3.5vw, 4.25rem);
+  --fs-h2: clamp(1.5rem, 1.1rem + 1.8vw, 2.25rem);
+  --fs-body: clamp(.98rem, .95rem + .25vw, 1.125rem);
 }
+
+/* Tema escuro default */
+html, body { background: var(--bg); color: var(--text); }

@@ -1,6 +1,4 @@
-// app/(site)/_components/Superpowers.tsx
 import Image from "next/image";
-// import Container from "./Container";  // use só se o Container estiver “limpo”
 
 const items = [
   {
@@ -33,7 +31,7 @@ export default function Superpowers() {
   return (
     <section id="superpoderes" className="section">
       <div className="mx-auto max-w-5xl px-4 text-center">
-        <h2 className="h2 mb-10">Quatro superpoderes</h2>
+        <h2 className="h2 mb-8">Quatro superpoderes</h2>
 
         <div className="grid gap-8 sm:grid-cols-2">
           {items.map((it) => {
@@ -41,18 +39,21 @@ export default function Superpowers() {
             return (
               <div
                 key={it.title}
-                className="rounded-2xl border border-white/10 bg-white/5 p-8 text-center flex flex-col items-center transition-shadow hover:shadow-[0_0_0_1px_rgba(255,255,255,.08)]"
+                className="card-accent-orange rounded-2xl p-8 text-center flex flex-col items-center"
               >
-                {isSvg ? (
-                  <img src={it.icon} alt={it.title} width={112} height={112} className="mb-4 drop-shadow-[0_6px_18px_rgba(0,0,0,.35)]" />
-                ) : (
-                  <div className="relative mb-4 h-28 w-28">
-                    <Image src={it.icon} alt={it.title} fill sizes="112px" className="object-contain drop-shadow-[0_6px_18px_rgba(0,0,0,.35)]" />
-                  </div>
-                )}
+                <div className="relative mb-4">
+                  <span className="absolute inset-0 -z-10 mx-auto size-16 rounded-full bg-orange-500/10 blur-md" />
+                  {isSvg ? (
+                    <img src={it.icon} alt={it.title} width={112} height={112} className="drop-shadow-[0_6px_18px_rgba(0,0,0,.35)] mx-auto" />
+                  ) : (
+                    <div className="relative h-28 w-28 mx-auto">
+                      <Image src={it.icon} alt={it.title} fill sizes="112px" className="object-contain drop-shadow-[0_6px_18px_rgba(0,0,0,.35)]" />
+                    </div>
+                  )}
+                </div>
 
-                <h3 className="text-lg font-semibold">{it.title}</h3>
-                <p className="mt-2 text-sm text-white/70 max-w-[36ch] mx-auto">{it.desc}</p>
+                <h3 className="text-lg font-semibold text-white">{it.title}</h3>
+                <p className="mt-2 text-white/90 leading-relaxed max-w-[36ch] mx-auto">{it.desc}</p>
               </div>
             );
           })}

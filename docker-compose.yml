@@ -1,38 +1,29 @@
 version: "3.9"
 
-networks:
-  traefik:
-    external: true
-
 services:
-  mentoark:
-    image: ghcr.io/angelomarcos/mentoark:latest
-    # Se preferir Docker Hub, mude para: mentoark/mentoark:latest
-    container_name: mentoark
+  mentoark-site:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mentoark-site
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-      - NEXT_TELEMETRY_DISABLED=1
-      # adicione aqui variáveis do .env se precisar, ou use env_file:
-      # - SOME_API_KEY=${SOME_API_KEY}
-    # env_file:
-    #  - ./.env
-    networks:
-      - traefik
     labels:
       traefik.enable: "true"
-      traefik.http.routers.mentoark.rule: Host(`YOUR_DOMAIN`)
-      traefik.http.routers.mentoark.entrypoints: websecure
-      traefik.http.routers.mentoark.tls: "true"
-      traefik.http.routers.mentoark.tls.certresolver: letsencrypt
-      traefik.http.services.mentoark.loadbalancer.server.port: "3000"
 
-  # Atualização automática quando a imagem nova for publicada
-  watchtower:
-    image: containrrr/watchtower
-    container_name: watchtower
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --cleanup --interval 60 mentoark
-    # a cada 60s verifica nova tag e atualiza o serviço mentoark
+      # Roteador HTTPS
+      traefik.http.routers.mentoark-site.rule: Host(`${HOST}`)
+      traefik.http.routers.mentoark-site.entrypoints: websecure
+      traefik.http.routers.mentoark-site.tls: "true"
+      traefik.http.routers.mentoark-site.tls.certresolver: letsencrypt
+
+      # Serviço aponta para a porta interna 3000
+      traefik.http.services.mentoark-site.loadbalancer.server.port: "3000"
+
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

@@ -1,6 +1,15 @@
-// app/(site)/_components/Container.tsx
-import { ReactNode } from "react";
+// frontend/app/(site)/_components/Container.tsx
+import * as React from "react";
 
-export default function Container({ children }: { children: ReactNode }) {
-  return <div className="mx-auto max-w-6xl px-4">{children}</div>;
+type ContainerProps = React.HTMLAttributes<HTMLDivElement> & {
+  children?: React.ReactNode;
+};
+
+export default function Container({ className = "", children, ...rest }: ContainerProps) {
+  const base = "mx-auto w-full max-w-7xl px-4";
+  return (
+    <div className={[base, className].filter(Boolean).join(" ")} {...rest}>
+      {children}
+    </div>
+  );
 }

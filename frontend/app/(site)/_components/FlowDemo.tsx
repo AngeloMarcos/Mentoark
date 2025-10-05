@@ -1,11 +1,27 @@
+"use client";
+
 import Container from "./Container";
 import FlowStep from "./FlowStep";
 
-export default function FlowDemo() {
+type FlowDemoProps = {
+  /** id do passo ativo (pode ser "entrada" | "processamento" | "conhecimento" | "saida" | null) */
+  activeId: string | null;
+  /** callback para alterar o passo ativo */
+  onStepChange: (id: string | null) => void;
+  /** classe extra opcional para o <section> */
+  className?: string;
+};
+
+export default function FlowDemo({
+  // usamos underscore para evitar aviso de variável não utilizada no build/lint
+  activeId: _activeId,
+  onStepChange: _onStepChange,
+  className = "",
+}: FlowDemoProps) {
   return (
     <section
       id="fluxo"
-      className="section"
+      className={["section", className].filter(Boolean).join(" ")}
       style={{ background: "linear-gradient(180deg, rgba(255,255,255,.02), transparent)" }}
     >
       <Container>

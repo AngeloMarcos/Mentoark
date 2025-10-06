@@ -3,22 +3,34 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useToast } from "./_components/Toast";
 
 export default function HeroSimulacao() {
   const [run, setRun] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
+  const { setToast, Toast } = useToast();
 
   useEffect(() => {
     if (!run) return;
     setMessages([input || "Olá!"]);
     const t1 = setTimeout(() => setMessages((p) => [...p, "Analisando contexto…"]), 900);
-    const t2 = setTimeout(() => setMessages((p) => [...p, `Resposta para “${input || "sua mensagem"}” gerada!`]), 1900);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    const t2 = setTimeout(
+      () => setMessages((p) => [...p, `Resposta para “${input || "sua mensagem"}” gerada!`]),
+      1900
+    );
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
   }, [run, input]);
 
   const handleSimular = () => {
-    if (!input.trim()) return;
+    if (!input.trim()) {
+      setToast("Digite uma pergunta 😉");
+      return;
+    }
+    setToast("Pergunta enviada, processando…");
     setRun(false);
     setMessages([]);
     setTimeout(() => setRun(true), 10);
@@ -35,14 +47,15 @@ export default function HeroSimulacao() {
         </h1>
 
         <p className="lead mt-6 max-w-[60ch]">
-          Nosso Agente 24/7 vai além do &apos;Olá, digite 1&apos;. Ele é construído com n8n e IA de
-          ponta para entender a intenção real, interagir com sua base de conhecimento e garantir
-          que sua equipe foque no que é mais importante. Veja como a complexidade se torna
-          simplicidade em um clique.
+          Conecte seus canais (WhatsApp, site, e-mail) a um agente 24/7.
+          Ele entende a intenção do cliente, consulta suas fontes (documentos, banco de dados, APIs)
+          e responde com clareza. Você foca no que importa; a IA cuida do resto.
         </p>
 
         <div className="mt-6 flex max-w-md gap-3">
-          <label htmlFor="simulacao-input" className="sr-only">Digite sua pergunta</label>
+          <label htmlFor="simulacao-input" className="sr-only">
+            Digite sua pergunta
+          </label>
           <input
             id="simulacao-input"
             type="text"
@@ -53,7 +66,12 @@ export default function HeroSimulacao() {
             onKeyDown={(e) => e.key === "Enter" && handleSimular()}
             autoComplete="off"
           />
-          <button type="button" className="btn btn--primary" onClick={handleSimular}>
+          <button
+            type="button"
+            className="btn btn--primary"
+            onClick={handleSimular}
+            aria-label="Simular pergunta"
+          >
             Simular
           </button>
         </div>
@@ -116,6 +134,8 @@ export default function HeroSimulacao() {
           </div>
         </motion.div>
       </div>
+
+      <Toast />
     </section>
   );
 }

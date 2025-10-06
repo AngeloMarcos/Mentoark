@@ -1,22 +1,27 @@
-import Fastify from "fastify";
+import fastify from "fastify";
 import cors from "@fastify/cors";
-import { healthRoutes } from "./routes/health.js";
-import { chatRoutes } from "./routes/chat.js";
+import rateLimit from "@fastify/rate-limit";
+import chatRoutes from "./routes/chat.js";
+import "dotenv/config";
 
-async function main() {
-  const app = Fastify({ logger: true });
+const app = fastify({ logger: true });
 
-  await app.register(cors, { origin: true });
-  app.register(healthRoutes, { prefix: "/health" });
-  app.register(chatRoutes, { prefix: "/chat" });
+await app.register(cors, {
+  origin: [/\.mentoark\.com\.br$/, "http://localhost:3000", "http://127.0.0.1:3000"]
+});
+await app.register(rateLimit, { max: 60, timeWindow: "1 minute" });
 
-  const port = Number(process.env.PORT ?? 4000);
-  try {
-    await app.listen({ port, host: "0.0.0.0" });
-    app.log.info(`API up on :${port}`);
-  } catch (err) {
-    app.log.error(err);
-    process.exit(1);
-  }
-}
-main();
+app.get("/health", async () => ({ ok: true }));
+
+// monta em /api/chat
+await app.register(async (r) => {
+  await r.register(chatRoutes, { prefix: "/chat" });
+}, { prefix: "/api" });
+
+const port = Number(process.env.PORT || 4000);
+const host = process.env.HOST || "0.0.0.0";
+
+app.listen({ port, host }).catch((err) => {
+  app.log.error(err);
+  process.exit(1);
+});

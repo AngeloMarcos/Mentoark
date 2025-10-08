@@ -3,6 +3,13 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   poweredByHeader: false,
-  output: 'standalone'
+  async rewrites() {
+    return [
+      {
+        source: '/api-dev/:path*',
+        destination: 'http://localhost:4000/:path*'
+      }
+    ];
+  }
 };
 module.exports = nextConfig;

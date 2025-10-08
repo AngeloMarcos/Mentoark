@@ -1,67 +1,91 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { request } from "undici";
 
-const Body = z.object({
+// Variáveis de ambiente (com defaults seguros)
+const MAINTENANCE = process.env.MAINTENANCE === "true";
+const WHATSAPP_URL =
+  process.env.WHATSAPP_URL ?? "https://wa.me/message/SFKOCU2RI45ZN1";
+const N8N_WEBHOOK_URL =
+  process.env.N8N_WEBHOOK_URL ?? ""; // pode ficar vazio enquanto estiver em manutenção
+const N8N_TIMEOUT_MS = Number(process.env.N8N_TIMEOUT_MS ?? 6000);
+
+// validação do body
+const Req = z.object({
   userId: z.string().min(1),
   message: z.string().min(1),
   metadata: z.record(z.any()).optional(),
 });
 
+// helper: fetch com timeout
+async function fetchWithTimeout(
+  url: string,
+  init: RequestInit,
+  ms: number
+): Promise<Response> {
+  const ac = new AbortController();
+  const to = setTimeout(() => ac.abort(), ms);
+  try {
+    return await fetch(url, { ...init, signal: ac.signal });
+  } finally {
+    clearTimeout(to);
+  }
+}
+
 export default async function chatRoutes(app: FastifyInstance) {
-  app.post("/", async (req, reply) => {
-    const parsed = Body.safeParse(req.body);
-    if (!parsed.success) {
-      return reply.status(400).send({ ok: false, error: "invalid_body", details: parsed.error.issues });
+  app.post("/chat", async (req, reply) => {
+    // valida body
+    const p = Req.safeParse(req.body);
+    if (!p.success) {
+      return reply.status(400).send({ ok: false, error: p.error });
     }
 
-    const { userId, message, metadata } = parsed.data;
-
-    const url = process.env.N8N_WEBHOOK_URL;
-    if (!url) {
-      return reply.status(500).send({ ok: false, error: "missing_n8n_url" });
-    }
-
-    const secret = process.env.N8N_WEBHOOK_SECRET || "";
-    const timeout = Number(process.env.REQUEST_TIMEOUT_MS || 15000);
-
-    try {
-      const res = await request(url, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          ...(secret ? { "x-mentoark-secret": secret } : {}),
-        },
-        body: JSON.stringify({ userId, message, metadata }),
-        bodyTimeout: timeout,
-        headersTimeout: timeout,
+    // 🔧 modo manutenção: SEMPRE responde com o link do WhatsApp
+    if (MAINTENANCE || !N8N_WEBHOOK_URL) {
+      const numberDisplay = "98092-5504";
+      return reply.send({
+        ok: true,
+        reply:
+          `Estamos concluindo os ajustes do chat por aqui.\n` +
+          `Fale com nosso assistente agora pelo WhatsApp: ${WHATSAPP_URL}\n` +
+          `Número: ${numberDisplay}`,
       });
+    }
 
-      const { statusCode } = res;
+    // caso manutenção esteja off, tenta n8n
+    try {
+      const res = await fetchWithTimeout(
+        N8N_WEBHOOK_URL,
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(p.data),
+        },
+        N8N_TIMEOUT_MS
+      );
 
-      // tenta json, se falhar tenta texto (pra logar)
-      let payload: any = null;
-      let rawText = "";
-      try {
-        payload = await res.body.json();
-      } catch {
-        rawText = await res.body.text();
-        app.log.warn({ rawText }, "n8n returned non-JSON body");
-      }
+      // aceita 2xx/3xx como ok, extrai json
+      const json = await res.json().catch(() => ({} as any));
 
-      if (statusCode >= 200 && statusCode < 300) {
-        const replyText =
-          (payload && (payload.reply ?? payload.message)) ||
-          (rawText ? String(rawText) : "Ok");
-        return reply.send({ ok: true, reply: String(replyText) });
-      }
+      // normaliza o campo de resposta vindo do n8n
+      const replyText: string =
+        (json.reply as string) ??
+        (json.message as string) ??
+        json?.ok === true
+          ? "Ok"
+          : "Ok";
 
-      app.log.error({ statusCode, payload, rawText }, "n8n returned error");
-      return reply.status(502).send({ ok: false, error: "bad_gateway", detail: payload ?? rawText ?? null });
-
-    } catch (err: any) {
-      app.log.error({ err }, "n8n request failed");
-      return reply.status(504).send({ ok: false, error: "timeout_or_network" });
+      return reply.send({ ok: true, reply: replyText });
+    } catch (err) {
+      req.log.error({ err }, "n8n request failed");
+      // fallback silencioso em caso de erro/timeout
+      const numberDisplay = "98092-5504";
+      return reply.send({
+        ok: true,
+        reply:
+          `Estamos concluindo os ajustes do chat por aqui.\n` +
+          `Fale com nosso assistente agora pelo WhatsApp: ${WHATSAPP_URL}\n` +
+          `Número: ${numberDisplay}`,
+      });
     }
   });
 }

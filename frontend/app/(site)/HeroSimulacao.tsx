@@ -1,152 +1,138 @@
 "use client";
 
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-import ChatPanel from "./ChatPanel";                // ⬅️ novo
-import { sendMessage } from "@/app/api/sendMessage";
-
-type Mode = "intro" | "chat";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { linkify } from "@/lib/linkify";
 
 export default function HeroSimulacao() {
-  const [mode, setMode] = useState<Mode>("intro");
+  const [run, setRun] = useState(false);
   const [input, setInput] = useState("");
-  const [seedMessage, setSeedMessage] = useState<string | null>(null); // primeira msg levada ao chat
-  const [loading, setLoading] = useState(false);
-  const [messages, setMessages] = useState<string[]>([]); // usado no painel intro
+  const [messages, setMessages] = useState<string[]>([]);
 
-  const handleFirstSimulate = async () => {
-    if (!input.trim() || loading) return;
-    setLoading(true);
-    setMessages([input]);
+  const whatsappLink = "https://wa.me/message/SFKOCU2RI45ZN1";
 
-    // tenta pegar a primeira resposta real, mas mesmo se der erro, abre o chat
-    try {
-      const res = await sendMessage("u1", input);
-      setSeedMessage(input);          // joga a primeira mensagem pro chat
-      setMode("chat");                // transição para o chat
-    } catch {
-      setSeedMessage(input);
-      setMode("chat");
-    } finally {
-      setLoading(false);
-    }
+  useEffect(() => {
+    if (!run) return;
+    setMessages([input || "Olá!"]);
+
+    // "digitando..."
+    const t1 = setTimeout(
+      () => setMessages((p) => [...p, "Processando..."]),
+      600
+    );
+
+    // simulação de resposta do backend
+    const t2 = setTimeout(() => {
+      setMessages((p) => [
+        ...p,
+        `📲 Fale com nossa IA no WhatsApp: ${whatsappLink}`,
+      ]);
+    }, 1200);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [run, input]);
+
+  const handleSimular = () => {
+    if (!input.trim()) return;
+    setRun(false);
+    setMessages([]);
+    setTimeout(() => setRun(true), 10);
   };
 
   return (
-    <section className="section hero grid items-center gap-14 md:grid-cols-2">
-      {/* Lado esquerdo: texto permanece igual */}
+    <section className="grid items-center gap-14 md:grid-cols-2">
+      {/* Texto principal */}
       <div>
-        <span className="badge">Demonstração</span>
-        <h1 className="h1 mt-4 text-gradient-primary">
-          Automação inteligente, visual e explicável
+        <span className="inline-block text-sm text-white/70">Demonstração</span>
+
+        {/* TÍTULO COM EFEITO NEON */}
+        <h1
+          className="
+            mt-3 text-4xl md:text-6xl font-extrabold leading-tight
+            bg-gradient-to-r from-fuchsia-500 via-violet-500 to-fuchsia-400
+            bg-clip-text text-transparent
+            drop-shadow-[0_0_12px_rgba(168,85,247,0.6)]
+            hover:drop-shadow-[0_0_20px_rgba(192,132,252,0.8)]
+            transition-all duration-300
+          "
+        >
+          Automação inteligente,<br />
+          visual e explicável
         </h1>
-        <p className="lead mt-6 max-w-[60ch]">
-          Nosso agente responde em tempo real — interpretando texto, áudio e imagem — com base
-          em IA conectada ao seu negócio.
+
+        <p className="mt-6 max-w-[60ch] text-white/80">
+          Nosso agente responde em tempo real — interpretando texto, áudio e
+          imagem — com base em IA conectada ao seu negócio.
         </p>
 
-        {/* Campo e botão permanecem — no modo chat, esse input vira só “atalho” (continua abrindo o chat) */}
         <div className="mt-6 flex max-w-md gap-3">
           <input
             type="text"
-            placeholder="Digite sua pergunta..."
             className="flex-1 rounded-xl border border-white/10 bg-white px-4 py-2 text-slate-900 placeholder:text-slate-500"
+            placeholder="Digite sua pergunta..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleFirstSimulate()}
-            disabled={loading}
+            onKeyDown={(e) => e.key === 'Enter' && handleSimular()}
+            autoComplete="off"
           />
           <button
-            onClick={handleFirstSimulate}
-            className="btn btn--primary"
-            disabled={loading}
+            type="button"
+            onClick={handleSimular}
+            className="
+              rounded-xl px-4 py-2 font-medium text-white shadow-lg
+              bg-gradient-to-br from-fuchsia-600 to-violet-600
+              hover:brightness-[1.1] active:scale-[0.97] transition
+              shadow-fuchsia-600/30
+            "
           >
-            {loading ? "Enviando..." : mode === "intro" ? "Simular" : "Abrir chat"}
+            Abrir chat
           </button>
-        </div>
-
-        <div className="mt-6 grid grid-cols-2 gap-3 text-sm text-white/80">
-          <div className="card-accent-orange p-3">
-            <div className="font-semibold">Entrada</div>
-            <div>Texto / Áudio / Imagem</div>
-          </div>
-          <div className="card-accent-orange p-3">
-            <div className="font-semibold">Saída</div>
-            <div>Resposta + Memória</div>
-          </div>
         </div>
       </div>
 
-      {/* Lado direito: transição mockup ⇄ chat */}
+      {/* Mockup + balões */}
       <div className="relative">
-        <AnimatePresence mode="wait" initial={false}>
-          {mode === "intro" ? (
-            <motion.div
-              key="intro-panel"
-              initial={{ opacity: 0, y: 12, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.98 }}
-              transition={{ duration: 0.35 }}
-              className="relative mx-auto hero-mockup"
-            >
-              <Image
-                src="/hero/hero-mockup.png"
-                alt="Mockup do fluxo conversacional"
-                width={1020}
-                height={2100}
-                className="h-auto w-full rounded-2xl border border-white/10 object-cover shadow-2xl"
-                priority
-              />
-              {/* Balões simples no modo intro (opcional) */}
-              {messages.length > 0 && (
-                <div className="pointer-events-none absolute inset-0 flex flex-col justify-end space-y-2 p-4">
-                  {messages.map((msg, i) => (
-                    <motion.div
-                      key={`${msg}-${i}`}
-                      initial={{ opacity: 0, y: 16 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.2 }}
-                      className="self-end max-w-[75%] rounded-lg bg-brand-2 px-3 py-2 text-sm text-white shadow"
-                    >
-                      {msg}
-                    </motion.div>
-                  ))}
-                  {loading && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="self-end max-w-[60%] rounded-lg bg-white/10 px-3 py-2 text-sm text-white/80 backdrop-blur"
-                    >
-                      <span className="inline-flex items-center gap-1">
-                        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white" />
-                        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white [animation-delay:120ms]" />
-                        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-white [animation-delay:240ms]" />
-                      </span>
-                    </motion.div>
-                  )}
-                </div>
-              )}
-            </motion.div>
-          ) : (
-            <motion.div
-              key="chat-panel"
-              initial={{ opacity: 0, y: 12, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 8, scale: 0.98 }}
-              transition={{ duration: 0.35 }}
-            >
-              <ChatPanel
-                initialMessage={seedMessage ?? undefined}
-                onExit={() => {
-                  setMode("intro");
-                  setSeedMessage(null);
-                  setMessages([]);
-                }}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="relative mx-auto rounded-2xl border border-white/10 shadow-2xl p-4 bg-black/20"
+        >
+          <Image
+            src="/hero/hero-mockup.png"
+            alt="Mockup do fluxo conversacional"
+            width={1020}
+            height={2100}
+            className="h-auto w-full rounded-2xl border border-white/10 object-cover shadow-2xl"
+            priority
+          />
+
+          {/* Balões */}
+          <div className="pointer-events-none absolute inset-0 flex flex-col justify-end gap-2 p-4">
+            {messages.map((msg, i) => (
+              <motion.div
+                key={`${msg}-${i}`}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.15 }}
+                className={`pointer-events-auto self-${
+                  i % 2 === 0 ? "end" : "start"
+                } max-w-[75%] rounded-2xl px-3 py-2 text-sm shadow
+                ${
+                  i % 2 === 0
+                    ? "bg-gradient-to-br from-fuchsia-600 to-violet-600 text-white"
+                    : "bg-white text-slate-900"
+                }`}
+              >
+                {linkify(msg)}
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );

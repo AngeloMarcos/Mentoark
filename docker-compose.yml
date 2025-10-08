@@ -2,24 +2,42 @@ version: "3.9"
 
 services:
   mentoark-site:
+    container_name: mentoark-site
+
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: mentoark-site
+
     restart: unless-stopped
+
+    # Porta e host usados pelo server standalone (node server.js)
     environment:
-      - NODE_ENV=production
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      NEXT_TELEMETRY_DISABLED: "1"
+
     labels:
       traefik.enable: "true"
+      # Se o Traefik estiver em outra rede, precisamos dizer qual é
+      traefik.docker.network: "traefik"
 
-      # Roteador HTTPS
-      traefik.http.routers.mentoark-site.rule: Host(`${HOST}`)
-      traefik.http.routers.mentoark-site.entrypoints: websecure
+      # Roteamento HTTPS
+      traefik.http.routers.mentoark-site.rule: "Host(`${HOST}`)"
+      traefik.http.routers.mentoark-site.entrypoints: "websecure"
       traefik.http.routers.mentoark-site.tls: "true"
-      traefik.http.routers.mentoark-site.tls.certresolver: letsencrypt
+      traefik.http.routers.mentoark-site.tls.certresolver: "letsencrypt"
 
-      # Serviço aponta para a porta interna 3000
+      # O serviço do Traefik aponta para a porta interna do app
       traefik.http.services.mentoark-site.loadbalancer.server.port: "3000"
+
+    # Checagem de saúde — ajuste o endpoint se necessário
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
     networks:
       - traefik
